@@ -878,7 +878,7 @@
 </main>
 
 <script>
-  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx_2nvmv-b5U__GhXsxiJnnSfSF8ErJHwQGDLqEmc5yG5lC3ila9DF0O31vQpixx1550A/exec";
+  const APPS_SCRIPT_URL = "https://formspree.io/f/xkokpran";
   const TOTAL_STEPS = 10;
   let currentStep = 1;
 
@@ -993,12 +993,12 @@
     const data = collectData();
 
     try {
-      await fetch(APPS_SCRIPT_URL, {
+      const res = await fetch(APPS_SCRIPT_URL, {
         method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "text/plain" },
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify(data),
       });
+      if (!res.ok) throw new Error("Formspree error");
 
       document.querySelectorAll(".step").forEach(s => s.style.display = "none");
       document.getElementById("confirm-screen").style.display = "block";
