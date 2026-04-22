@@ -996,11 +996,11 @@
       await fetch(APPS_SCRIPT_URL, {
         method: "POST",
         mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "text/plain" },
         body: JSON.stringify(data),
       });
 
-      document.querySelector(".form-container").innerHTML = "";
+      document.querySelectorAll(".step").forEach(s => s.style.display = "none");
       document.getElementById("confirm-screen").style.display = "block";
       document.getElementById("progress-bar").style.width = "100%";
       document.getElementById("step-label").textContent = "Concluído";
