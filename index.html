@@ -877,8 +877,14 @@
 </div>
 </main>
 
+<!-- Iframe oculto para envio ao Google Sheets sem CORS -->
+<iframe name="sheets-iframe" style="display:none"></iframe>
+<form id="sheets-form" action="https://script.google.com/macros/s/AKfycbwRXXwE_zKewEhp4jgOsw8ayx8V0BVCzZE2wHcJD6u_JanQtL48sxfu0iAp9DothsUmcQ/exec" method="POST" target="sheets-iframe" enctype="application/x-www-form-urlencoded" style="display:none">
+  <input type="hidden" name="payload" id="sheets-payload">
+</form>
+
 <script>
-  const APPS_SCRIPT_URL = "https://formspree.io/f/xkokpran";
+  const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwRXXwE_zKewEhp4jgOsw8ayx8V0BVCzZE2wHcJD6u_JanQtL48sxfu0iAp9DothsUmcQ/exec";
   const TOTAL_STEPS = 10;
   let currentStep = 1;
 
@@ -993,12 +999,11 @@
     const data = collectData();
 
     try {
-      const res = await fetch(APPS_SCRIPT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) throw new Error("Formspree error");
+      document.getElementById("sheets-payload").value = JSON.stringify(data);
+      document.getElementById("sheets-form").submit();
+
+      // Aguarda 1.5s para o iframe terminar antes de mostrar confirmação
+      await new Promise(r => setTimeout(r, 1500));
 
       document.querySelectorAll(".step").forEach(s => s.style.display = "none");
       document.getElementById("confirm-screen").style.display = "block";
